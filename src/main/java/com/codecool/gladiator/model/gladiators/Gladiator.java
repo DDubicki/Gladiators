@@ -55,8 +55,7 @@ public abstract class Gladiator {
      * @return the full name
      */
     public String getFullName() {
-        // Todo
-        return name;
+        return getClass().getSimpleName() + " "  + name;
     }
 
     public enum Multiplier {

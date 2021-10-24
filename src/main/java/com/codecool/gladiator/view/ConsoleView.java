@@ -1,5 +1,7 @@
 package com.codecool.gladiator.view;
 
+import com.codecool.gladiator.util.RandomUtils;
+
 /**
  * Basic console view implementation
  */
@@ -7,13 +9,12 @@ public class ConsoleView implements Viewable {
 
     @Override
     public void display(String text) {
-        // Todo
+        System.out.println(text);
     }
 
     @Override
     public int getNumberBetween(int min, int max) {
-        // Todo
-        return 2;
+        return RandomUtils.getRandomNumberInBound(min, max);
     }
 
 }
