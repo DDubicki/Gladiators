@@ -8,14 +8,16 @@ public abstract class Gladiator {
     private final int baseDex;
     private int level;
 
+    private int hp;
+
     /**
      * Constructor for Gladiators
      *
-     * @param name the gladiator's name
-     * @param baseHp the gladiator's base Health Points
-     * @param baseSp the gladiator's base Strength Points
+     * @param name    the gladiator's name
+     * @param baseHp  the gladiator's base Health Points
+     * @param baseSp  the gladiator's base Strength Points
      * @param baseDex the gladiator's base Dexterity Points
-     * @param level the gladiator's starting Level
+     * @param level   the gladiator's starting Level
      */
     public Gladiator(String name, int baseHp, int baseSp, int baseDex, int level) {
         this.name = name;
@@ -55,15 +57,35 @@ public abstract class Gladiator {
      * @return the full name
      */
     public String getFullName() {
-        return getClass().getSimpleName() + " "  + name;
+        return getClass().getSimpleName() + " " + name;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public void levelUp(){
+    public void levelUp() {
         this.level++;
+    }
+
+    public int getCurrentHp() {
+        return hp;
+    }
+
+    public boolean isDead(){
+        return hp <= 0;
+    }
+
+    public final double getMaximumHp() {
+        return baseHp * getHpMultiplier().value * level;
+    }
+
+    public final double getMaximumSp() {
+        return baseSp * getSpMultiplier().value * level;
+    }
+
+    public final double getMaximumDex() {
+        return baseDex * getDexMultiplier().value * level;
     }
 
     public enum Multiplier {
@@ -80,5 +102,6 @@ public abstract class Gladiator {
         public double getValue() {
             return value;
         }
+
     }
 }
