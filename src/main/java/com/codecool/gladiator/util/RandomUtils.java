@@ -6,7 +6,11 @@ public class RandomUtils {
 
     private static final Random RANDOM = new Random();
 
-    public static int getRandomNumberInBound(int minBound, int maxBound) {
+    public static int getRandomNumberInRange(int minBound, int maxBound) {
         return RANDOM.nextInt((maxBound - minBound + 1)) + minBound;
+    }
+
+    public static int getRandomNumber(int bound) {
+        return RANDOM.nextInt(bound);
     }
 }

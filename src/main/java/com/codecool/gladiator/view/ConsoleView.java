@@ -14,7 +14,7 @@ public class ConsoleView implements Viewable {
 
     @Override
     public int getNumberBetween(int min, int max) {
-        return RandomUtils.getRandomNumberInBound(min, max);
+        return RandomUtils.getRandomNumberInRange(min, max);
     }
 
 }
