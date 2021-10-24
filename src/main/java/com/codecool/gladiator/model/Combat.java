@@ -29,7 +29,7 @@ public class Combat {
      * @return winner of combat
      */
     public Gladiator simulate() {
-        // Todo
+
         return gladiator1;
     }
 

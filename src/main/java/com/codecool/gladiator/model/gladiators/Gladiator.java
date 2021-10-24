@@ -7,15 +7,16 @@ public abstract class Gladiator {
     private final int baseSp;
     private final int baseDex;
     private int level;
+    private int hp;
 
     /**
      * Constructor for Gladiators
      *
-     * @param name the gladiator's name
-     * @param baseHp the gladiator's base Health Points
-     * @param baseSp the gladiator's base Strength Points
+     * @param name    the gladiator's name
+     * @param baseHp  the gladiator's base Health Points
+     * @param baseSp  the gladiator's base Strength Points
      * @param baseDex the gladiator's base Dexterity Points
-     * @param level the gladiator's starting Level
+     * @param level   the gladiator's starting Level
      */
     public Gladiator(String name, int baseHp, int baseSp, int baseDex, int level) {
         this.name = name;
@@ -55,7 +56,55 @@ public abstract class Gladiator {
      * @return the full name
      */
     public String getFullName() {
-        return getClass().getSimpleName() + " "  + name;
+        return getClass().getSimpleName() + " " + name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void levelUp() {
+        this.level++;
+    }
+
+    public int getCurrentHp() {
+        return hp;
+    }
+
+    public boolean isDead() {
+        return hp <= 0;
+    }
+
+    public void decreaseHpBy(int value) {
+        hp -= value;
+    }
+
+    public void healUp() {
+        hp = getMaximumHp();
+    }
+
+    public final int getMaximumHp() {
+        return (int) (baseHp * getHpMultiplier().value * level);
+    }
+
+    public int getSp() {
+        return baseSp;
+    }
+
+    public int getDex() {
+        return baseDex;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public final int getMaximumSp() {
+        return (int) (baseSp * getSpMultiplier().value * level);
+    }
+
+    public final int getMaximumDex() {
+        return (int) (baseDex * getDexMultiplier().value * level);
     }
 
     public enum Multiplier {
@@ -72,6 +121,6 @@ public abstract class Gladiator {
         public double getValue() {
             return value;
         }
-    }
 
+    }
 }

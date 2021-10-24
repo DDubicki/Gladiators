@@ -2,25 +2,32 @@ package com.codecool.gladiator.model.gladiators;
 
 public class Brutal extends Gladiator {
 
+    /**
+     * Constructor for Gladiators
+     *
+     * @param name    the gladiator's name
+     * @param baseHp  the gladiator's base Health Points
+     * @param baseSp  the gladiator's base Strength Points
+     * @param baseDex the gladiator's base Dexterity Points
+     * @param level   the gladiator's starting Level
+     */
+
     public Brutal(String name, int baseHp, int baseSp, int baseDex, int level) {
         super(name, baseHp, baseSp, baseDex, level);
     }
 
     @Override
     protected Multiplier getHpMultiplier() {
-        // Todo
-        return null;
+        return Multiplier.High;
     }
 
     @Override
     protected Multiplier getSpMultiplier() {
-        // Todo
-        return null;
+        return Multiplier.High;
     }
 
     @Override
     protected Multiplier getDexMultiplier() {
-        // Todo
-        return null;
+        return Multiplier.Low;
     }
 }
