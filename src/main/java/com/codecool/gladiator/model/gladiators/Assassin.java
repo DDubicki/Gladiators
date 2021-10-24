@@ -18,16 +18,16 @@ public class Assassin extends Gladiator {
 
     @Override
     protected Multiplier getHpMultiplier() {
-        return null;
+        return Multiplier.Low;
     }
 
     @Override
     protected Multiplier getSpMultiplier() {
-        return null;
+        return Multiplier.High;
     }
 
     @Override
     protected Multiplier getDexMultiplier() {
-        return null;
+        return Multiplier.High;
     }
 }

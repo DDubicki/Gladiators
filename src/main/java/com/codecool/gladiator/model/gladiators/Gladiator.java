@@ -58,6 +58,14 @@ public abstract class Gladiator {
         return getClass().getSimpleName() + " "  + name;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void levelUp(){
+        this.level++;
+    }
+
     public enum Multiplier {
         Low(0.75),
         Medium(1.0),
@@ -73,5 +81,4 @@ public abstract class Gladiator {
             return value;
         }
     }
-
 }
