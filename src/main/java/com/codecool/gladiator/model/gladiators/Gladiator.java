@@ -7,7 +7,6 @@ public abstract class Gladiator {
     private final int baseSp;
     private final int baseDex;
     private int level;
-
     private int hp;
 
     /**
@@ -72,20 +71,40 @@ public abstract class Gladiator {
         return hp;
     }
 
-    public boolean isDead(){
+    public boolean isDead() {
         return hp <= 0;
     }
 
-    public final double getMaximumHp() {
-        return baseHp * getHpMultiplier().value * level;
+    public void decreaseHpBy(int value) {
+        hp -= value;
     }
 
-    public final double getMaximumSp() {
-        return baseSp * getSpMultiplier().value * level;
+    public void healUp() {
+        hp = getMaximumHp();
     }
 
-    public final double getMaximumDex() {
-        return baseDex * getDexMultiplier().value * level;
+    public final int getMaximumHp() {
+        return (int) (baseHp * getHpMultiplier().value * level);
+    }
+
+    public int getSp() {
+        return baseSp;
+    }
+
+    public int getDex() {
+        return baseDex;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public final int getMaximumSp() {
+        return (int) (baseSp * getSpMultiplier().value * level);
+    }
+
+    public final int getMaximumDex() {
+        return (int) (baseDex * getDexMultiplier().value * level);
     }
 
     public enum Multiplier {
