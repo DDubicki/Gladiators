@@ -41,10 +41,10 @@ public class GladiatorFactory {
      * @return new Gladiator
      */
     public Gladiator generateRandomGladiator() {
-        int BASE_HP = RandomUtils.getRandomNumberInRange(MIN_RANGE_VALUE, MAX_RANGE_VALUE);
-        int BASE_SP = RandomUtils.getRandomNumberInRange(MIN_RANGE_VALUE, MAX_RANGE_VALUE);
-        int BASE_DEX = RandomUtils.getRandomNumberInRange(MIN_RANGE_VALUE, MAX_RANGE_VALUE);
-        int START_LEVEL = RandomUtils.getRandomNumberInRange(LEVEL_MIN_RANGE_VALUE, LEVEL_MAX_RANGE_VALUE);
+        int BASE_HP = RandomUtils.getRandomIntNumberFromRange(MIN_RANGE_VALUE, MAX_RANGE_VALUE);
+        int BASE_SP = RandomUtils.getRandomIntNumberFromRange(MIN_RANGE_VALUE, MAX_RANGE_VALUE);
+        int BASE_DEX = RandomUtils.getRandomIntNumberFromRange(MIN_RANGE_VALUE, MAX_RANGE_VALUE);
+        int START_LEVEL = RandomUtils.getRandomIntNumberFromRange(LEVEL_MIN_RANGE_VALUE, LEVEL_MAX_RANGE_VALUE);
 
         int randomNumber = RandomUtils.getRandomNumber(5);
         switch (randomNumber){
