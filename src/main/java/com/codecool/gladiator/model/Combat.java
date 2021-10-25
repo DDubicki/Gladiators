@@ -33,7 +33,23 @@ public class Combat {
         Gladiator firstAttacker = getFirstAttackerGladiator();
         Gladiator secondAttacker = firstAttacker == gladiator1 ? gladiator2 : gladiator1;
 
+        makeTurn(firstAttacker, secondAttacker);
+
+
         return checkWinner();
+    }
+
+    private void makeTurn(Gladiator firstAttacker, Gladiator secondAttacker) {
+        int hittingChance = getHittingChance(firstAttacker, secondAttacker);
+
+    }
+
+    private int getHittingChance(Gladiator firstAttacker, Gladiator secondAttacker) {
+        int attackerDex = firstAttacker.getMaximumDex();
+        int defenderDex = secondAttacker.getMaximumDex();
+        int dexDifference = attackerDex - defenderDex;
+        int percentageChanceToHitting = Math.max(10, dexDifference);
+        return Math.min(100, percentageChanceToHitting) / 100;
     }
 
     private Gladiator getFirstAttackerGladiator() {
@@ -47,7 +63,7 @@ public class Combat {
         if (gladiator1 == null && gladiator2 == null) {
             return null;
         } else {
-            if ((gladiator1 != null ? gladiator1.getCurrentHp() : 0) <= 0) {
+            if ((gladiator1 != null ? gladiator1.getMaximumHp() : 0) <= 0) {
                 return gladiator2;
             }
             return gladiator1;
