@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class Combat {
 
+    private static final double MIN_DAMAGE_NUMBER = 0.1;
+    private static final double MAX_DAMAGE_NUMBER = 0.5;
     private final Gladiator gladiator1;
     private final Gladiator gladiator2;
 
@@ -41,7 +43,9 @@ public class Combat {
 
     private void makeTurn(Gladiator firstAttacker, Gladiator secondAttacker) {
         int hittingChance = getHittingChance(firstAttacker, secondAttacker);
-
+        double R = RandomUtils.getRandomDoubleNumberFromRange(MIN_DAMAGE_NUMBER, MAX_DAMAGE_NUMBER);
+        int damage = (int) (firstAttacker.getMaximumSp() * R);
+        int i = secondAttacker.getCurrentHp() - damage;
     }
 
     private int getHittingChance(Gladiator firstAttacker, Gladiator secondAttacker) {
@@ -53,7 +57,7 @@ public class Combat {
     }
 
     private Gladiator getFirstAttackerGladiator() {
-        int randomNumber = RandomUtils.getRandomNumberInRange(1, 3);
+        int randomNumber = RandomUtils.getRandomIntNumberFromRange(1, 3);
         if (randomNumber == 2)
             return gladiator2;
         return gladiator1;
