@@ -1,6 +1,7 @@
 package com.codecool.gladiator.model;
 
 import com.codecool.gladiator.model.gladiators.Gladiator;
+import com.codecool.gladiator.util.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,28 @@ public class Combat {
      * @return winner of combat
      */
     public Gladiator simulate() {
+        Gladiator firstAttacker = getFirstAttackerGladiator();
+        Gladiator secondAttacker = firstAttacker == gladiator1 ? gladiator2 : gladiator1;
 
+        return checkWinner();
+    }
+
+    private Gladiator getFirstAttackerGladiator() {
+        int randomNumber = RandomUtils.getRandomNumberInRange(1, 3);
+        if (randomNumber == 2)
+            return gladiator2;
         return gladiator1;
+    }
+
+    private Gladiator checkWinner() {
+        if (gladiator1 == null && gladiator2 == null) {
+            return null;
+        } else {
+            if ((gladiator1 != null ? gladiator1.getCurrentHp() : 0) <= 0) {
+                return gladiator2;
+            }
+            return gladiator1;
+        }
     }
 
     public Gladiator getGladiator1() {
