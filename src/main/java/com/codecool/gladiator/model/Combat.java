@@ -15,6 +15,7 @@ public class Combat {
     private static final double MAX_DAMAGE_NUMBER = 0.5;
     private final Gladiator gladiator1;
     private final Gladiator gladiator2;
+    private boolean firstGladiatorIsAttacker = RandomUtils.getRandomBoolean();
 
     private final List<String> combatLog;
 
@@ -32,46 +33,63 @@ public class Combat {
      * @return winner of combat
      */
     public Gladiator simulate() {
-        Gladiator firstAttacker = getFirstAttackerGladiator();
-        Gladiator secondAttacker = firstAttacker == gladiator1 ? gladiator2 : gladiator1;
-
-        makeTurn(firstAttacker, secondAttacker);
-
-
-        return checkWinner();
+        if (gladiator1 == null)
+            return null;
+        if (gladiator2 == null)
+            return null;
+        boolean someoneIsDead;
+        do {
+            makeTurn();
+            someoneIsDead = (gladiator1.isDead() || gladiator2.isDead());
+        } while (!someoneIsDead);
+        return pickWinner();
     }
 
-    private void makeTurn(Gladiator firstAttacker, Gladiator secondAttacker) {
-        int hittingChance = getHittingChance(firstAttacker, secondAttacker);
-        double R = RandomUtils.getRandomDoubleNumberFromRange(MIN_DAMAGE_NUMBER, MAX_DAMAGE_NUMBER);
-        int damage = (int) (firstAttacker.getMaximumSp() * R);
-        int i = secondAttacker.getCurrentHp() - damage;
+    private void makeTurn() {
+        Gladiator actualAttacker = firstGladiatorIsAttacker ? gladiator1 : gladiator2;
+        Gladiator actualDefender = getSecondGladiator(actualAttacker);
+
+        int hittingChance = getHittingChance(actualAttacker, actualDefender);
+        if (RandomUtils.isLuckyHit(hittingChance)) {
+            hitEnemy(actualAttacker, actualDefender);
+        } else {
+            miss(actualAttacker);
+        }
+        firstGladiatorIsAttacker = !firstGladiatorIsAttacker;
     }
 
-    private int getHittingChance(Gladiator firstAttacker, Gladiator secondAttacker) {
-        int attackerDex = firstAttacker.getMaximumDex();
-        int defenderDex = secondAttacker.getMaximumDex();
+    private Gladiator getSecondGladiator(Gladiator firstGladiator) {
+        return firstGladiator == gladiator1 ? gladiator2 : gladiator1;
+    }
+
+    private void hitEnemy(Gladiator actualAttacker, Gladiator actualDefender) {
+        double randomDouble = RandomUtils.getRandomDoubleNumberFromRange(MIN_DAMAGE_NUMBER, MAX_DAMAGE_NUMBER);
+        int damage = (int) (actualAttacker.getMaximumSp() * randomDouble);
+        actualDefender.decreaseHpBy(damage);
+        combatLog.add(String.format("%s deals %s damage", actualAttacker.getFullName(), damage));
+    }
+
+    private void miss(Gladiator actualAttacker) {
+        combatLog.add(String.format("%s missed", actualAttacker.getFullName()));
+    }
+
+    private int getHittingChance(Gladiator actualAttacker, Gladiator actualDefender) {
+        int attackerDex = actualAttacker.getMaximumDex();
+        int defenderDex = actualDefender.getMaximumDex();
         int dexDifference = attackerDex - defenderDex;
         int percentageChanceToHitting = Math.max(10, dexDifference);
-        return Math.min(100, percentageChanceToHitting) / 100;
+        return Math.min(100, percentageChanceToHitting);
     }
 
-    private Gladiator getFirstAttackerGladiator() {
-        int randomNumber = RandomUtils.getRandomIntNumberFromRange(1, 3);
-        if (randomNumber == 2)
-            return gladiator2;
-        return gladiator1;
+    private Gladiator getWinner() {
+        return gladiator1.getCurrentHp() <= 0 ? gladiator2 : gladiator1;
     }
 
-    private Gladiator checkWinner() {
-        if (gladiator1 == null && gladiator2 == null) {
-            return null;
-        } else {
-            if ((gladiator1 != null ? gladiator1.getMaximumHp() : 0) <= 0) {
-                return gladiator2;
-            }
-            return gladiator1;
-        }
+    private Gladiator pickWinner() {
+        Gladiator winner = getWinner();
+        Gladiator loser = getSecondGladiator(winner);
+        combatLog.add(String.format("%s has died, %s wins!", loser.getFullName(), winner.getFullName()));
+        return winner;
     }
 
     public Gladiator getGladiator1() {
