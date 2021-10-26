@@ -10,6 +10,7 @@ import com.sun.source.tree.BinaryTree;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Colosseum {
 
@@ -18,7 +19,7 @@ public class Colosseum {
 
     private final Viewable view;
     private final GladiatorFactory gladiatorFactory;
-    private int stages = 2;
+    private int stages;
 
     public Colosseum(Viewable view, GladiatorFactory gladiatorFactory) {
         this.view = view;
@@ -42,7 +43,11 @@ public class Colosseum {
 
     private List<Gladiator> generateGladiators(int numberOfGladiators) {
         List<Gladiator> gladiators = new ArrayList<>();
-        // Todo
+        GladiatorFactory factory = new GladiatorFactory("Names.txt");
+        for (int i = 0; i < numberOfGladiators; i++) {
+            Gladiator gladiator = factory.generateRandomGladiator();
+            gladiators.add(gladiator);
+        }
         introduceGladiators(gladiators);
         return gladiators;
     }
@@ -71,19 +76,22 @@ public class Colosseum {
     }
 
     public void welcome() {
-        view.display("Ave Caesar, and welcome to the Colosseum!");
+        view.display("\nAve Caesar, and welcome to the Colosseum!");
     }
 
     public void welcomeAndAskForStages() {
+        Scanner scanner = new Scanner(System.in);
         welcome();
-        view.display("How many stages of the Tournament do you wish to watch? (1-10)");
-        stages = view.getNumberBetween(MIN_TOURNAMENT_STAGES, MAX_TOURNAMENT_STAGES);
+        do {
+            view.display("How many stages of the Tournament do you wish to watch? (1-10)");
+            stages = scanner.nextInt();
+        } while (stages < MIN_TOURNAMENT_STAGES || stages > MAX_TOURNAMENT_STAGES);
     }
 
     private void introduceGladiators(List<Gladiator> gladiators) {
         view.display(String.format("\nWe have selected Rome's %d finest warriors for today's Tournament!", gladiators.size()));
         for (Gladiator gladiator: gladiators) {
-            view.display(String.format(" - %s", gladiator));
+            view.display(String.format(" - %s", gladiator.getFullName()));
         }
         view.display("\n\"Ave Imperator, morituri te salutant!\"");
     }
