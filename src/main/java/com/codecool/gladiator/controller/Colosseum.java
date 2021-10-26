@@ -5,6 +5,7 @@ import com.codecool.gladiator.model.Contestants;
 import com.codecool.gladiator.model.gladiators.*;
 import com.codecool.gladiator.util.Tournament;
 import com.codecool.gladiator.view.Viewable;
+import com.sun.source.tree.BinaryTree;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,7 +37,7 @@ public class Colosseum {
         announceChampion(champion);
 
         // The following line chains the above lines:
-        // announceChampion(getChampion(new BinaryTree<>(generateGladiators((int) Math.pow(2, stages)))));
+//         announceChampion(getChampion(new BinaryTree<>(generateGladiators((int) Math.pow(2, stages)))));
     }
 
     private List<Gladiator> generateGladiators(int numberOfGladiators) {
@@ -62,6 +63,7 @@ public class Colosseum {
         announceCombat(gladiator1, gladiator2);
 
         // Todo
+        combat.simulate();
 
         displayCombatLog(combat);
         announceWinnerAndLoser(gladiator1, gladiator2);
