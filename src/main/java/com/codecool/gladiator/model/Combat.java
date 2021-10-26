@@ -15,8 +15,7 @@ public class Combat {
     private static final double MAX_DAMAGE_NUMBER = 0.5;
     private final Gladiator gladiator1;
     private final Gladiator gladiator2;
-    private final boolean firstGladiatorIsAttacker = RandomUtils.getRandomBoolean();
-    private boolean someoneIsDead;
+    private boolean firstGladiatorIsAttacker = RandomUtils.getRandomBoolean();
 
     private final List<String> combatLog;
 
@@ -38,6 +37,7 @@ public class Combat {
             return null;
         if (gladiator2 == null)
             return null;
+        boolean someoneIsDead;
         do {
             makeTurn();
             someoneIsDead = (gladiator1.isDead() || gladiator2.isDead());
@@ -45,39 +45,32 @@ public class Combat {
         return pickWinner();
     }
 
-    private Gladiator pickWinner() {
-        Gladiator winner = getWinner();
-        Gladiator loser = getSecondGladiator(winner);
-        String winLog = String.format("%s has died, %s wins!", loser.getFullName(), winner.getFullName());
-        combatLog.add(winLog);
-        return winner;
+    private void makeTurn() {
+        Gladiator actualAttacker = firstGladiatorIsAttacker ? gladiator1 : gladiator2;
+        Gladiator actualDefender = getSecondGladiator(actualAttacker);
+
+        int hittingChance = getHittingChance(actualAttacker, actualDefender);
+        if (RandomUtils.isLuckyHit(hittingChance)) {
+            hitEnemy(actualAttacker, actualDefender);
+        } else {
+            miss(actualAttacker);
+        }
+        firstGladiatorIsAttacker = !firstGladiatorIsAttacker;
     }
 
     private Gladiator getSecondGladiator(Gladiator firstGladiator) {
         return firstGladiator == gladiator1 ? gladiator2 : gladiator1;
     }
 
-    private void makeTurn() {
-        Gladiator actualAttacker = firstGladiatorIsAttacker ? gladiator1 : gladiator2;
-        Gladiator actualDefender = getSecondGladiator(actualAttacker);
-
-
-        int hittingChance = getHittingChance(actualAttacker, actualDefender);
-        boolean isHitting = RandomUtils.isLuckyHit(hittingChance);
-        if (isHitting) {
-            decreaseDefendersHp(actualAttacker, actualDefender);
-        } else {
-            String missLog = String.format("%s missed", actualAttacker.getFullName());
-            combatLog.add(missLog);
-        }
-    }
-
-    private void decreaseDefendersHp(Gladiator actualAttacker, Gladiator actualDefender) {
+    private void hitEnemy(Gladiator actualAttacker, Gladiator actualDefender) {
         double randomDouble = RandomUtils.getRandomDoubleNumberFromRange(MIN_DAMAGE_NUMBER, MAX_DAMAGE_NUMBER);
         int damage = (int) (actualAttacker.getMaximumSp() * randomDouble);
         actualDefender.decreaseHpBy(damage);
-        String hitLog = String.format("%s deals %s damage", actualAttacker.getFullName(), damage);
-        combatLog.add(hitLog);
+        combatLog.add(String.format("%s deals %s damage", actualAttacker.getFullName(), damage));
+    }
+
+    private void miss(Gladiator actualAttacker) {
+        combatLog.add(String.format("%s missed", actualAttacker.getFullName()));
     }
 
     private int getHittingChance(Gladiator actualAttacker, Gladiator actualDefender) {
@@ -90,6 +83,13 @@ public class Combat {
 
     private Gladiator getWinner() {
         return gladiator1.getCurrentHp() <= 0 ? gladiator2 : gladiator1;
+    }
+
+    private Gladiator pickWinner() {
+        Gladiator winner = getWinner();
+        Gladiator loser = getSecondGladiator(winner);
+        combatLog.add(String.format("%s has died, %s wins!", loser.getFullName(), winner.getFullName()));
+        return winner;
     }
 
     public Gladiator getGladiator1() {
