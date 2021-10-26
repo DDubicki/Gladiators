@@ -30,4 +30,8 @@ public class RandomUtils {
     public static boolean isLuckyHit(int hittingChance) {
         return hittingChance == 100;
     }
+
+    public static boolean getRandomBoolean() {
+        return RANDOM.nextBoolean();
+    }
 }
