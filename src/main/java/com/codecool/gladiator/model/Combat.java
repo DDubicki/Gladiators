@@ -32,46 +32,41 @@ public class Combat {
      * @return winner of combat
      */
     public Gladiator simulate() {
-        Gladiator firstAttacker = getFirstAttackerGladiator();
-        Gladiator secondAttacker = firstAttacker == gladiator1 ? gladiator2 : gladiator1;
+        if (gladiator1 == null)
+            return null;
+        if (gladiator2 == null)
+            return null;
 
-        makeTurn(firstAttacker, secondAttacker);
+        Gladiator actualAttacker = RandomUtils.getRandomGladiator(gladiator1, gladiator2);
+        Gladiator actualDefender = actualAttacker == gladiator1 ? gladiator2 : gladiator1;
 
+        makeTurn(actualAttacker, actualDefender);
 
+        // Check this
         return checkWinner();
     }
 
-    private void makeTurn(Gladiator firstAttacker, Gladiator secondAttacker) {
-        int hittingChance = getHittingChance(firstAttacker, secondAttacker);
-        double R = RandomUtils.getRandomDoubleNumberFromRange(MIN_DAMAGE_NUMBER, MAX_DAMAGE_NUMBER);
-        int damage = (int) (firstAttacker.getMaximumSp() * R);
-        int i = secondAttacker.getCurrentHp() - damage;
+
+    private void makeTurn(Gladiator actualAttacker, Gladiator actualDefender) {
+        int hittingChance = getHittingChance(actualAttacker, actualDefender);
+        boolean isHitting = RandomUtils.isLuckyHit(hittingChance);
+        if (isHitting) {
+            double randomDouble = RandomUtils.getRandomDoubleNumberFromRange(MIN_DAMAGE_NUMBER, MAX_DAMAGE_NUMBER);
+            int damage = (int) (actualAttacker.getMaximumSp() * randomDouble);
+            actualDefender.decreaseHpBy(damage);
+        }
     }
 
-    private int getHittingChance(Gladiator firstAttacker, Gladiator secondAttacker) {
-        int attackerDex = firstAttacker.getMaximumDex();
-        int defenderDex = secondAttacker.getMaximumDex();
+    private int getHittingChance(Gladiator actualAttacker, Gladiator actualDefender) {
+        int attackerDex = actualAttacker.getMaximumDex();
+        int defenderDex = actualDefender.getMaximumDex();
         int dexDifference = attackerDex - defenderDex;
         int percentageChanceToHitting = Math.max(10, dexDifference);
-        return Math.min(100, percentageChanceToHitting) / 100;
-    }
-
-    private Gladiator getFirstAttackerGladiator() {
-        int randomNumber = RandomUtils.getRandomIntNumberFromRange(1, 3);
-        if (randomNumber == 2)
-            return gladiator2;
-        return gladiator1;
+        return Math.min(100, percentageChanceToHitting);
     }
 
     private Gladiator checkWinner() {
-        if (gladiator1 == null && gladiator2 == null) {
-            return null;
-        } else {
-            if ((gladiator1 != null ? gladiator1.getMaximumHp() : 0) <= 0) {
-                return gladiator2;
-            }
-            return gladiator1;
-        }
+        return gladiator1.getCurrentHp() <= 0 ? gladiator2 : gladiator1;
     }
 
     public Gladiator getGladiator1() {
