@@ -5,7 +5,6 @@ import com.codecool.gladiator.model.Contestants;
 import com.codecool.gladiator.model.gladiators.*;
 import com.codecool.gladiator.util.Tournament;
 import com.codecool.gladiator.view.Viewable;
-import com.sun.source.tree.BinaryTree;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -64,9 +63,27 @@ public class Colosseum {
     }
 
     private Gladiator getChampion(Tournament tournament) {
-
-        // Todo - call simulateCombat as many times as needed
+        int battlesNumbers = tournament.size();
+        for (int i = 0; i < battlesNumbers; i++) {
+            Tournament startBrunch = tournament.getLeftBranch();
+            takeCurrentBranch(startBrunch);
+        }
         return null;
+    }
+
+    private Tournament takeCurrentBranch(Tournament currentBranch) {
+        Tournament newBranch = currentBranch;
+        if (currentBranch.getLeftBranch() != null) {
+            newBranch = currentBranch.getLeftBranch();
+            takeCurrentBranch(newBranch);
+        } else if (currentBranch.getRightBranch() != null) {
+            newBranch = currentBranch.getRightBranch();
+            takeCurrentBranch(newBranch);
+        }
+        Contestants contestants = newBranch.getContestants();
+        Combat combat = new Combat(contestants);
+        simulateCombat(combat);
+        return currentBranch;
     }
 
     private Gladiator simulateCombat(Combat combat) {
@@ -105,8 +122,19 @@ public class Colosseum {
 
     private void announceCombat(Gladiator gladiator1, Gladiator gladiator2) {
         view.display(String.format("\nDuel %s versus %s:", gladiator1.getName(), gladiator2.getName()));
-        view.display(String.format(" - %s", gladiator1));
-        view.display(String.format(" - %s", gladiator2));
+        view.display(getGladiatorsData(gladiator1));
+        view.display(getGladiatorsData(gladiator2));
+    }
+
+    private String getGladiatorsData(Gladiator gladiator) {
+        String name = String.format(" - %s", gladiator.getFullName());
+        String characteristics = String.format(" (%s/%s HP, %s SP, %s DEX, %s LVL)",
+                gladiator.getMaximumHp(),
+                gladiator.getMaximumHp(),
+                gladiator.getMaximumSp(),
+                gladiator.getMaximumDex(),
+                gladiator.getLevel());
+        return name + characteristics;
     }
 
     private void displayCombatLog(Combat combat) {
