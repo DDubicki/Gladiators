@@ -12,12 +12,13 @@ public class Tournament {
     private Contestants contestants;
     private Tournament leftBranch;
     private Tournament rightBranch;
+
     private int size;
+
     /**
      * A boolean value used for navigating between left and right branches when adding new values
      */
     private boolean left = true;
-
     /**
      * Constructor with initial value
      *
@@ -79,6 +80,10 @@ public class Tournament {
      */
     public int size() {
         return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     /**
